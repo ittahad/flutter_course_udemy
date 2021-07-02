@@ -16,6 +16,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.grey[900],
+        appBar: AppBar(
+          backgroundColor: Colors.orangeAccent,
+          title: Text('About'),
+          leading: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.arrow_back),
+          ),
+        ),
         body: SafeArea(
           child: Container(
             decoration: BoxDecoration(
@@ -74,7 +82,7 @@ class MyApp extends StatelessWidget {
                         color: Colors.grey[900],
                       ),
                       title: Text(
-                        '+880 1721070717',
+                        '+880 1700000000',
                         style: TextStyle(
                           fontFamily: 'SourceSansPro',
                           letterSpacing: 2.0,
