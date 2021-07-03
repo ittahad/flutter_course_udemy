@@ -31,25 +31,33 @@ class _DicePageState extends State<DicePage> {
 
   var imageName = 'images/dice1.png';
   var imageName2 = 'images/dice1.png';
-  void generateRandomNumber(int player) {
+  void firstPlayerState(int player) {
     setState(() {
       rand = Random().nextInt(5) + 1;
       imageName = 'images/dice$rand.png';
+    });
+    hasWon(player);
+  }
 
+  void secondPlayerState(int player) {
+    setState(() {
       rand2 = Random().nextInt(5) + 1;
       imageName2 = 'images/dice$rand2.png';
-
-      if (rand == rand2) {
-        Fluttertoast.showToast(
-            msg: "Player $player won",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
     });
+    hasWon(player);
+  }
+
+  void hasWon(int player) {
+    if (rand == rand2) {
+      Fluttertoast.showToast(
+          msg: "Player $player won",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   @override
@@ -68,7 +76,7 @@ class _DicePageState extends State<DicePage> {
                 ),
                 TextButton(
                   child: Image.asset(imageName),
-                  onPressed: () => generateRandomNumber(1),
+                  onPressed: () => firstPlayerState(1),
                 ),
               ],
             ),
@@ -84,7 +92,7 @@ class _DicePageState extends State<DicePage> {
                 ),
                 TextButton(
                   child: Image.asset(imageName2),
-                  onPressed: () => generateRandomNumber(2),
+                  onPressed: () => secondPlayerState(2),
                 ),
               ],
             ),
