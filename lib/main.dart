@@ -3,7 +3,7 @@ import 'package:quizzler/questions.dart';
 import 'package:quizzler/quiz_brain.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-var quizBrain = QuizBrain();
+var quizBrain = QuizBrain().populateEmpty();
 var questions = Questions();
 
 void main() => runApp(Quizzler());
@@ -38,7 +38,7 @@ class _QuizPageState extends State<QuizPage> {
         Alert(
           context: context,
           title: "Finished",
-          desc: "Thanks for completing the Q/A session.",
+          desc: "Thanks for completing the quiz",
           buttons: [
             DialogButton(
               child: Text(
@@ -59,12 +59,12 @@ class _QuizPageState extends State<QuizPage> {
 
     if (questions.getQuestionAns(quizBrain.getCurrentQuestionPos()) == ans) {
       setState(() {
-        quizBrain.addCorrectTick();
+        quizBrain.addCorrectTick(quizBrain.getCurrentQuestionPos());
         quizBrain.nextQuestion();
       });
     } else {
       setState(() {
-        quizBrain.addIncorrectTick();
+        quizBrain.addIncorrectTick(quizBrain.getCurrentQuestionPos());
         quizBrain.nextQuestion();
       });
     }
@@ -136,7 +136,7 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: quizBrain.getScores(),
         )
       ],
