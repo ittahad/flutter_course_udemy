@@ -1,3 +1,5 @@
+import 'package:bmi_calculator/bmi_brain.dart';
+import 'package:bmi_calculator/result_page.dart';
 import 'package:bmi_calculator/reusable_card.dart';
 import 'package:bmi_calculator/icon_content.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,13 +56,15 @@ class _InputPageState extends State<InputPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('BMI CALCULATOR'),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Row(
+      appBar: AppBar(
+        title: Text('BMI CALCULATOR'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Row(
               children: <Widget>[
                 Expanded(
                   child: ReusableCard(
@@ -100,61 +104,65 @@ class _InputPageState extends State<InputPage> {
                 ),
               ],
             ),
-            Expanded(
-              child: ReusableCard(
-                cardColor: kInactiveCardColor,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'HEIGHT',
-                      style: kLabelTextStyle,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: <Widget>[
-                        Text(
-                          '$sliderValue',
-                          style: kLabelTextStyleW900,
-                        ),
-                        Text(
-                          'cm',
-                          style: kLabelTextStyle,
-                        )
-                      ],
-                    ),
-                    SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        thumbShape: RoundSliderThumbShape(
-                          enabledThumbRadius: 15.0,
-                        ),
-                        overlayShape: RoundSliderOverlayShape(
-                          overlayRadius: 30.0,
-                        ),
-                        thumbColor: Color(0xFFEB1555),
-                        activeTrackColor: Colors.white,
-                        overlayColor: Color(0x29EB1555),
-                        trackHeight: 2.0,
+          ),
+          Expanded(
+            flex: 3,
+            child: ReusableCard(
+              cardColor: kInactiveCardColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'HEIGHT',
+                    style: kLabelTextStyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: <Widget>[
+                      Text(
+                        '$sliderValue',
+                        style: kLabelTextStyleW900,
                       ),
-                      child: Slider(
-                        value: sliderValue.toDouble(),
-                        min: 120.0,
-                        max: 220.0,
-                        inactiveColor: Color(0xFF8D8E98),
-                        onChanged: (double val) {
-                          setState(() {
-                            sliderValue = val.toInt();
-                          });
-                        },
+                      Text(
+                        'cm',
+                        style: kLabelTextStyle,
+                      )
+                    ],
+                  ),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      thumbShape: RoundSliderThumbShape(
+                        enabledThumbRadius: 15.0,
                       ),
+                      overlayShape: RoundSliderOverlayShape(
+                        overlayRadius: 30.0,
+                      ),
+                      thumbColor: Color(0xFFEB1555),
+                      activeTrackColor: Colors.white,
+                      overlayColor: Color(0x29EB1555),
+                      trackHeight: 2.0,
                     ),
-                  ],
-                ),
+                    child: Slider(
+                      value: sliderValue.toDouble(),
+                      min: 120.0,
+                      max: 220.0,
+                      inactiveColor: Color(0xFF8D8E98),
+                      onChanged: (double val) {
+                        setState(() {
+                          sliderValue = val.toInt();
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            Row(
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
               children: <Widget>[
                 Expanded(
                   child: ReusableCard(
@@ -236,8 +244,48 @@ class _InputPageState extends State<InputPage> {
                 ),
               ],
             ),
-          ],
-        ));
+          ),
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onTap: () {
+                if (selectedGender == null) return;
+
+                BMIBrain brain = BMIBrain(
+                  height: sliderValue,
+                  weight: weight,
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => ResultPage(
+                      bmiValue: brain.calculateBMI(),
+                      bmiInfo: brain.getInterpretation(),
+                      bmiResultText: brain.getResult(),
+                      color: brain.getColor(),
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                child: Text(
+                  'CALCULATE',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                color: Color(0xFFEB1555),
+                margin: EdgeInsets.only(top: 10.0),
+                width: double.infinity,
+                alignment: Alignment.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
